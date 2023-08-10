@@ -19,7 +19,7 @@
 * Backend : Spring, JPA
 * DB : MySQL
  
-## 프로젝트 구조
+## 현재 프로젝트 구조
 DDD를 지향하며 도메인 단위로 패키지를 구성합니다.
 ```
 delivEatAPI
