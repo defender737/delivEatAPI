@@ -29,7 +29,7 @@ delivEatAPI
 │   │   │       └───domain
 │   │   │       │   |───food
 │   │   │       │   └───Restairant
-│   │   │       └───BookclubApplication.java
+│   │   │       └───delivEatApiApplication.java
 │   │   └───resources
 │   │       │   application.properties
 │   │       │   static
