@@ -1,4 +1,4 @@
-package com.example.delivEatAPI.domain.Restairant;
+package com.example.delivEatAPI.domain.restairant;
 
 
 import javax.persistence.*;
