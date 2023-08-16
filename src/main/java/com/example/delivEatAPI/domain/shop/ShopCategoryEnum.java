@@ -1,6 +1,6 @@
-package com.example.delivEatAPI.domain.food;
+package com.example.delivEatAPI.domain.shop;
 
-public enum FoodCategoryEnum {
+public enum ShopCategoryEnum {
     KOREAN("Korean"),           // 한식
     CHINESE("Chinese"),         // 중식
     JAPANESE("Japanese"),       // 일식
@@ -13,7 +13,7 @@ public enum FoodCategoryEnum {
 
     private final String category;
 
-    FoodCategoryEnum(String category) {
+    ShopCategoryEnum(String category) {
         this.category = category;
     }
 
