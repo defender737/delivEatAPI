@@ -6,26 +6,30 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TB_menu")
+@Table(name = "menu")
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "menu_id", nullable = false) // Primary Key
-    private Long foodId;
+    @Column(name = "menuId", nullable = false) // Primary Key
+    private Long menuId;
 
-    @Column(name = "menu_name", nullable = false) // 음식 이름
-    private String foodName;
+    @Column(name = "menuName", nullable = false) // 음식 이름
+    private String menuName;
 
-    @Column(name = "menu_price", nullable = false) // 음식 가격
-    private int foodPrice;
+    @Column(name = "menuPrice", nullable = false) // 음식 가격
+    private int menuPrice;
+
+    @Column(name = "category") // 카테고리
+    private String category;
 
     @ManyToOne
     @JoinColumn(name = "shop", nullable = false)
     private Shop shop;
 
-    public Menu(String foodName, int foodPrice, Shop shop) {
-        this.foodName = foodName;
-        this.foodPrice = foodPrice;
+    public Menu(String foodName, int foodPrice, String category, Shop shop) {
+        this.menuName = foodName;
+        this.menuPrice = foodPrice;
+        this.category = category;
         this.shop = shop;
     }
 }
