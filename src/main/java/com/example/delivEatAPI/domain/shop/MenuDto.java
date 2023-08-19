@@ -14,12 +14,9 @@ import javax.persistence.*;
 public class MenuDto {
 
     private Long menuId;
-
     private String menuName;
-
     private int menuPrice;
-
     private String category;
+    private Long shopId;
 
-    private Shop shop;
 }
