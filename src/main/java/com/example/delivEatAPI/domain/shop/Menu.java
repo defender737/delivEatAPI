@@ -32,4 +32,16 @@ public class Menu {
         this.category = category;
         this.shop = shop;
     }
+
+    public void changeName(String menuName){
+        this.menuName = menuName;
+    }
+
+    public void changePrice(int menuPrice) {
+        this.menuPrice = menuPrice;
+    }
+
+    public void changeCategory(String category) {
+        this.category = category;
+    }
 }

@@ -1,65 +1,110 @@
 package com.example.delivEatAPI.domain.shop;
 
+import com.example.delivEatAPI.error.ShopNotFoundException;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import com.example.delivEatAPI.error.MenuNotFoundException;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@Service
+
 public class MenuServicempl implements MenuService {
 
     private final MenuRepository menuRepository;
-    private final ModelMapper modelMapper;
+    private final ShopRepository shopRepository;
+    ModelMapper modelMapper = new ModelMapper();
+
+    @Autowired
+    public MenuServicempl(MenuRepository menuRepository, ShopRepository shopRepository) {
+
+        this.menuRepository = menuRepository;
+        this.shopRepository = shopRepository;
+    }
+
 
     @Override
+    @Transactional
     public List<MenuDto> getMenuList(Long shopId) {
-        List<MenuDto> menuDtoList = menuRepository.findByShopId(shopId);
-        if (menuDtoList.isEmpty()) {
+        List<Menu> menuList = menuRepository.findByShop_ShopId(shopId);
+        if (menuList.isEmpty()) {
             throw new MenuNotFoundException("메뉴 목록을 찾을 수 없습니다.");
         }
-        return menuDtoList;
+
+        return menuList.stream()
+                .map(menuEntity -> modelMapper.map(menuEntity, MenuDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public MenuDto getMenu(Long shopId, Long menuId) {
-        MenuDto menu = menuRepository.findByShopIdAndMenuId(shopId, menuId);
+        Menu menu = menuRepository.findByShop_ShopIdAndMenuId(shopId, menuId);
+
+        MenuDto menuDto = modelMapper.map(menu, MenuDto.class);
 
         if (menu == null) {
             throw new MenuNotFoundException("메뉴를 찾을 수 없습니다. ID: " + menuId);
         }
 
-        return menu;
+        return menuDto;
     }
 
 
     @Override
+    @Transactional
     public void addMenu(Long shopId, MenuDto menuDto) {
-        MenuDto menu = menuRepository.insertMenu(menuDto);
-        if (menu == null) {
-            throw new MenuNotFoundException("메뉴를 찾을 수 없습니다. ID: " + menuDto.getMenuId());
+        // MenuDto로부터 필요한 정보 추출
+        String menuName = menuDto.getMenuName();
+        int menuPrice = menuDto.getMenuPrice();
+        String category = menuDto.getCategory();
+        Long bodyShopId = menuDto.getShopId();
+
+        if (bodyShopId.equals(shopId)) {
+            // MenuDto에서 필요한 정보로 Menu 엔티티 생성
+            Shop shop = shopRepository.findById(shopId)
+                    .orElseThrow(() -> new ShopNotFoundException("상점을 찾을 수 없습니다."));
+
+            Menu menu = new Menu(menuName, menuPrice, category, shop);
+
+            // Menu 엔티티 저장
+            menuRepository.save(menu);
+        } else {
+            throw new IllegalArgumentException("요청된 상점 ID와 메뉴에 포함된 상점 ID가 일치하지 않습니다.");
         }
     }
 
     @Override
+    @Transactional
     public void editMenu(Long shopId, Long menuId, MenuDto menuDto) {
-        MenuDto existingMenu = menuRepository.findByShopIdAndMenuId(shopId, menuId);
+        Menu forUpdateMenu = menuRepository.findByShop_ShopIdAndMenuId(shopId, menuId);
 
-        if (existingMenu == null) {
+        if (forUpdateMenu == null) {
             throw new MenuNotFoundException("해당 메뉴는 존재하지 않습니다.");
         }
-        modelMapper.map(menuDto, existingMenu);
-        menuRepository.updateMenu(existingMenu);
+        forUpdateMenu.changeName(menuDto.getMenuName());
+        forUpdateMenu.changePrice(menuDto.getMenuPrice());
+        forUpdateMenu.changeCategory(menuDto.getCategory());
+
+
+        menuRepository.save(forUpdateMenu);
     }
 
     @Override
+    @Transactional
     public void deleteAllMenu(Long shopId) {
-
+        menuRepository.deleteAllByShop_ShopId(shopId);
     }
 
     @Override
+    @Transactional
     public void deleteMenu(Long shopId, Long menuId) {
-
+        menuRepository.deleteMenuByShop_ShopIdAndMenuId(shopId, menuId);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.delivEatAPI.domain.shop;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,38 +9,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
+@RequestMapping("/v1/shop/{shop_id}/menu")
 public class MenuController {
     private final MenuService menuService;
 
-    @GetMapping("/v1/shop/{shop_id}/menu")
-    public List<MenuDto> getMenuList(@PathVariable Long shop_id) {
-        return menuService.getMenuList(shop_id);
+    @Autowired
+    public MenuController(MenuService menuService){ //생성자
+        this.menuService = menuService;
     }
 
-    @GetMapping("/v1/shop/{shop_id}/menu/{menu_id}")
+    @GetMapping
+    public ResponseEntity<List<MenuDto>> getMenuList(@PathVariable Long shop_id) {
+        List<MenuDto> menuDtoList = menuService.getMenuList(shop_id);
+        return ResponseEntity.ok(menuDtoList);
+    }
+
+    @GetMapping("/{menu_id}")
     public ResponseEntity<MenuDto> getMenu(@PathVariable Long shop_id, @PathVariable Long menu_id) {
         MenuDto menu = menuService.getMenu(shop_id, menu_id);
-        return new ResponseEntity<>(menu, HttpStatus.OK);
+        return ResponseEntity.ok(menu);
     }
 
-    @PostMapping("/v1/shop/{shop_id}/menu")
-    public void addMenu(@PathVariable Long shop_id, @RequestBody MenuDto menuDto) {
+    @PostMapping
+    public ResponseEntity<String> addMenu(@PathVariable Long shop_id, @RequestBody MenuDto menuDto) {
         menuService.addMenu(shop_id, menuDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("메뉴가 성공적으로 추가되었습니다.");
     }
 
-    @PatchMapping("/v1/shop/{shop_id}/menu/{menu_id}")
-    public void editMenu(@PathVariable Long shop_id, @PathVariable Long menu_id, @RequestBody MenuDto menuDto) {
+    @PutMapping("/{menu_id}")
+    public ResponseEntity<String> editMenu(@PathVariable Long shop_id, @PathVariable Long menu_id, @RequestBody MenuDto menuDto) {
         menuService.editMenu(shop_id, menu_id, menuDto);
+        return ResponseEntity.ok("메뉴가 성공적으로 수정되었습니다.");
     }
 
-    @DeleteMapping("/v1/shop/{shop_id}/menu")
-    public void deleteAllMenu(@PathVariable Long shop_id) {
+    @DeleteMapping
+    public ResponseEntity<String> deleteAllMenu(@PathVariable Long shop_id) {
         menuService.deleteAllMenu(shop_id);
+        return ResponseEntity.ok(shop_id + "의 메뉴가 성공적으로 삭제되었습니다.");
     }
 
-    @DeleteMapping("/v1/shop/{shop_id}/menu/{menu_id}")
-    public void deleteMenu(@PathVariable Long shop_id, @PathVariable Long menu_id) {
+    @DeleteMapping("/{menu_id}")
+    public ResponseEntity<String> deleteMenu(@PathVariable Long shop_id, @PathVariable Long menu_id) {
         menuService.deleteMenu(shop_id, menu_id);
+        return ResponseEntity.ok(menu_id + "의 메뉴가 성공적으로 삭제되었습니다.");
     }
 }

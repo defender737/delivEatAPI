@@ -1,21 +1,22 @@
 package com.example.delivEatAPI.domain.shop;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
-public interface MenuRepository extends JpaRepository {
+public interface MenuRepository extends JpaRepository<Menu, Long> {
 
-    List<MenuDto> findByShopId(Long shopId);
+    List<Menu> findByShop_ShopId(Long shopId);
 
+    Menu findByShop_ShopIdAndMenuId(Long shopId, Long menuId);
 
-    MenuDto findByShopIdAndMenuId(Long shopId, Long menuId);
+    void deleteAllByShop_ShopId(Long ShopId);
 
-    MenuDto insertMenu(MenuDto menuDto);
+    void deleteMenuByShop_ShopIdAndMenuId(Long shopId, Long menuId);
 
-    void updateMenu(MenuDto existingMenu);
 }
 
 
