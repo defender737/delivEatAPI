@@ -1,4 +1,4 @@
-package com.example.delivEatAPI.domain.shop;
+package com.example.delivEatAPI.domain.menu;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

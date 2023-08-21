@@ -1,7 +1,5 @@
-package com.example.delivEatAPI.domain.shop;
+package com.example.delivEatAPI.domain.menu;
 
-
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
-package com.example.delivEatAPI.domain.shop;
+package com.example.delivEatAPI.domain.menu;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

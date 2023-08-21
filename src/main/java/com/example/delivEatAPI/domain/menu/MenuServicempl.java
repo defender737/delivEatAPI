@@ -1,16 +1,15 @@
-package com.example.delivEatAPI.domain.shop;
+package com.example.delivEatAPI.domain.menu;
 
+import com.example.delivEatAPI.domain.shop.Shop;
+import com.example.delivEatAPI.domain.shop.ShopRepository;
 import com.example.delivEatAPI.error.ShopNotFoundException;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import com.example.delivEatAPI.error.MenuNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

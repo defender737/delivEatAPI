@@ -1,5 +1,6 @@
-package com.example.delivEatAPI.domain.shop;
+package com.example.delivEatAPI.domain.menu;
 
+import com.example.delivEatAPI.domain.shop.Shop;
 import lombok.*;
 import javax.persistence.*;
 
