@@ -10,4 +10,10 @@ public class OrderDto {
     public Long orderId;
 
     public String status;
+
+    public String address;
+
+    public String dateTime;
+
+    public Long userId;
 }

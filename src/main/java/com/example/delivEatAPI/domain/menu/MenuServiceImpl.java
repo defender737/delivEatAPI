@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 
 @Service
 
-public class MenuServicempl implements MenuService {
+public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
     private final ShopRepository shopRepository;
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    public MenuServicempl(MenuRepository menuRepository, ShopRepository shopRepository) {
+    public MenuServiceImpl(MenuRepository menuRepository, ShopRepository shopRepository) {
 
         this.menuRepository = menuRepository;
         this.shopRepository = shopRepository;

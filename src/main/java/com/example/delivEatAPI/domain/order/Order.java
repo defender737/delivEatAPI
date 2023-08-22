@@ -23,7 +23,7 @@ public class Order {
     private String address;
 
     @Column(name = "datetime", nullable = false)
-    private int datetime;
+    private String datetime;
 
     @Column(name = "status")
     private String status;
@@ -32,10 +32,12 @@ public class Order {
     @JoinColumn(name = "user", nullable = false)
     private User user;
 
-    public Order(String address, int datetime, String status, User user) {
+    public Order(String address, String datetime, String status, User user) {
         this.address = address;
         this.datetime = datetime;
         this.status = status;
         this.user = user;
     }
+
+    public void changeStatus(String status){this.status = status;}
 }
