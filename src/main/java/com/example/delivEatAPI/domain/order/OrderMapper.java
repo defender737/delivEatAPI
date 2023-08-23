@@ -1,10 +1,8 @@
 package com.example.delivEatAPI.domain.order;
 
 import com.example.delivEatAPI.global.config.GenericMapper;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -15,17 +13,14 @@ import java.util.List;
 )
 public interface OrderMapper extends GenericMapper<OrderDto, Order> {
 
-    // DTO 리스트를 Entity 리스트로 매핑
-    List<Order> toEntityList(List<OrderDto> dtoList);
-
-    // Entity 리스트를 DTO 리스트로 매핑
-    List<OrderDto> toDtoList(List<Order> entityList);
+    OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
     @Override
-    @Mapping(target = "userId", ignore = true)
     OrderDto toDto(Order order);
 
     @Override
-    @Mapping(target = "user", ignore = true)
-    Order toEnttiy(OrderDto orderDto);
+    Order toEntity(OrderDto orderDto);
+
+    List<OrderDto> toDtoList(List<Order> entityList);
+
 }

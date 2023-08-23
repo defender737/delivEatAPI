@@ -1,7 +1,12 @@
 package com.example.delivEatAPI.domain.order;
 
+import com.example.delivEatAPI.domain.cart.Cart;
+import com.example.delivEatAPI.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +18,9 @@ public class OrderDto {
 
     public String address;
 
-    public String dateTime;
+    public LocalDateTime datetime;
 
-    public Long userId;
+    public User user;
+
+    private List<Cart> cartList;
 }

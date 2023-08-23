@@ -19,19 +19,19 @@ public class Cart {
     private Long cartId;
 
     @ManyToOne
-    @JoinColumn(name = "user", nullable = false)
+    @JoinColumn(name = "orderId", nullable = false)
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "menu", nullable = false)
-    private Menu menuId;
+    @OneToOne
+    @JoinColumn(name = "menuId", nullable = false)
+    private Menu menu;
 
     @Column(name = "quantity", nullable = false)
     private String quantity;
 
     public Cart(Order order, Menu menuId, String quantity) {
         this.order = order;
-        this.menuId = menuId;
+        this.menu = menuId;
         this.quantity = quantity;
     }
 }

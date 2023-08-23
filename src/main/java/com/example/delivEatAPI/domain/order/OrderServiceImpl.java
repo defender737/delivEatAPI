@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -24,11 +25,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void addOrder(Long userId, OrderDto orderDto) {
 
-        if(userId.equals(orderDto.getUserId())){
-            Order newOrder = orderMapper.toEnttiy(orderDto);
-            //userId를 찾아서 User를 엔티티에 넣어줘야함!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if(userId.equals(orderDto.getUser().getUserId())){
+            Order newOrder = orderMapper.toEntity(orderDto);
             orderRepository.save(newOrder);
         }else {
             throw new IllegalArgumentException("사용자 ID와 주문 정보의 사용자 ID가 일치하지 않습니다.");
@@ -36,20 +37,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDto getOrder(Long order_id) {
         Order order = orderRepository.findById(order_id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문은 존재하지 않습니다. 주문 ID: " + order_id));
 
-        OrderDto orderDto = orderMapper.toDto(order);
-        orderDto.setUserId(order.getUser().getUserId());
-        return orderDto;
+        return orderMapper.toDto(order);
     }
 
     @Override
+    @Transactional
     public List<OrderDto> getOrderList(Long userId) {
         try {
             List<Order> orderList = orderRepository.findByUser_UserId(userId);
-            //LIST는 id를 하나하나 다 넣어줄 수 없는데... Dto를 수정해야하나....................
             return orderMapper.toDtoList(orderList);
         }catch (DataAccessException e){
             throw new RuntimeException("주문목록을 가져올 수 없습니다.", e);
@@ -57,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void changeStatus(Long order_id, String status) {
         Order order = orderRepository.findById(order_id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문은 존재하지 않습니다. 주문 ID: " + order_id));

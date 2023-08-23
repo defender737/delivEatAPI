@@ -17,6 +17,11 @@ public class MenuController {
         this.menuService = menuService;
     }
 
+    public ResponseEntity<String> addMenu(@PathVariable Long shop_id, @RequestBody MenuDto menuDto) {
+        menuService.addMenu(shop_id, menuDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("메뉴가 성공적으로 추가되었습니다.");
+    }
+
     @GetMapping
     public ResponseEntity<List<MenuDto>> getMenuList(@PathVariable Long shop_id) {
         List<MenuDto> menuDtoList = menuService.getMenuList(shop_id);
@@ -30,10 +35,7 @@ public class MenuController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addMenu(@PathVariable Long shop_id, @RequestBody MenuDto menuDto) {
-        menuService.addMenu(shop_id, menuDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("메뉴가 성공적으로 추가되었습니다.");
-    }
+
 
     @PutMapping("/{menu_id}")
     public ResponseEntity<String> editMenu(@PathVariable Long shop_id, @PathVariable Long menu_id, @RequestBody MenuDto menuDto) {
