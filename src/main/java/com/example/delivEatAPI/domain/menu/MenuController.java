@@ -51,8 +51,8 @@ public class MenuController {
     }
 
     @DeleteMapping("/{menu_id}")
-    public ResponseEntity<String> deleteMenu(@PathVariable UUID shop_id, @PathVariable Long menu_id) {
-        menuService.deleteMenu(shop_id, menu_id);
+    public ResponseEntity<String> deleteMenu(@PathVariable Long menu_id) {
+        menuService.deleteMenu(menu_id);
         return ResponseEntity.ok(menu_id + "의 메뉴가 성공적으로 삭제되었습니다.");
     }
 }

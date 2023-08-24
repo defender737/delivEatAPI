@@ -84,7 +84,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public void deleteMenu(UUID shopId, Long menuId) {
-        menuRepository.deleteMenuByShop_ShopIdAndMenuId(shopId, menuId);
+    public void deleteMenu(Long menuId) {
+        menuRepository.deleteById(menuId);
     }
 }

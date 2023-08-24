@@ -16,5 +16,5 @@ public interface MenuService {
 
     void deleteAllMenu(UUID shopId);
 
-    void deleteMenu(UUID shop_id, Long menu_id);
+    void deleteMenu(Long menu_id);
 }
