@@ -15,5 +15,5 @@ public class CartDto {
 
     private Menu menu;
 
-    private String quantity;
+    private int quantity;
 }

@@ -11,27 +11,34 @@ import javax.persistence.*;
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "menuId", nullable = false) // Primary Key
+    @Column(name = "menuId", nullable = false)
     private Long menuId;
 
-    @Column(name = "menuName", nullable = false) // 음식 이름
+    @Column(name = "menuName", nullable = false)
     private String menuName;
 
-    @Column(name = "menuPrice", nullable = false) // 음식 가격
+    @Column(name = "menuPrice", nullable = false)
     private int menuPrice;
 
-    @Column(name = "category") // 카테고리
+    @Column(name = "category")
     private String category;
 
     @ManyToOne
     @JoinColumn(name = "shop", nullable = false)
     private Shop shop;
 
-    public Menu(String foodName, int foodPrice, String category, Shop shop) {
-        this.menuName = foodName;
-        this.menuPrice = foodPrice;
+    @Builder
+    public Menu(String menuName, int menuPrice, String category, Shop shop) {
+        this.menuName = menuName;
+        this.menuPrice = menuPrice;
         this.category = category;
         this.shop = shop;
+    }
+
+    public void update(String menuName, int menuPrice, String category){
+        this.menuName = menuName;
+        this.menuPrice = menuPrice;
+        this.category = category;
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -26,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void addOrder(Long userId, OrderDto orderDto) {
+    public void addOrder(UUID userId, OrderDto orderDto) {
 
         if(userId.equals(orderDto.getUser().getUserId())){
             Order newOrder = orderMapper.toEntity(orderDto);
@@ -38,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDto getOrder(Long order_id) {
+    public OrderDto getOrder(UUID order_id) {
         Order order = orderRepository.findById(order_id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문은 존재하지 않습니다. 주문 ID: " + order_id));
 
@@ -47,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderDto> getOrderList(Long userId) {
+    public List<OrderDto> getOrderList(UUID userId) {
         try {
             List<Order> orderList = orderRepository.findByUser_UserId(userId);
             return orderMapper.toDtoList(orderList);
@@ -58,13 +59,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void changeStatus(Long order_id, String status) {
+    public void changeStatus(UUID order_id, String status) {
         Order order = orderRepository.findById(order_id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문은 존재하지 않습니다. 주문 ID: " + order_id));
 
         order.changeStatus(status);
-        if(!status.equals(order.getStatus())){
-            throw new IllegalArgumentException("주문 상태 변경에 실패하였습니다.");
-        }
+        orderRepository.save(order);
     }
 }

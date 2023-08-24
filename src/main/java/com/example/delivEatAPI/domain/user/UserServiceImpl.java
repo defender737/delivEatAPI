@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -19,6 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void addUser(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         if(user == null){
@@ -28,7 +31,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(Long userId) {
+    @Transactional
+
+    public UserDto getUser(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다. UserId: " + userId));
 
@@ -38,19 +43,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @Modifying
-    public void editMenu(Long userId, UserDto userDto) {
+    public void editMenu(UserDto userDto) {
+        UUID userId = userDto.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다. UserId: " + userId));
 
-        if (userId.equals(userDto.getUserId())) {
-            userMapper.updateFromDto(userDto, user);
-        } else {
-            throw new RuntimeException("사용자 정보 수정에 실패했습니다.");
-        }
+        user.update(userDto.getName(), userDto.getPhoneNumber(), userDto.getAddress());
+        userRepository.save(user);
     }
 
+
     @Override
-    public void deleteMenu(Long userId) {
+    @Transactional
+
+    public void deleteMenu(UUID userId) {
         try {
             userRepository.deleteById(userId);
         } catch (EmptyResultDataAccessException e) {

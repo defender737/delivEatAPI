@@ -10,15 +10,15 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Getter
 @Setter
 public class ShopDto {
 
 
-    private Long shopId;
+    private UUID shopId;
 
     private String shopName;
 
@@ -28,9 +28,11 @@ public class ShopDto {
 
     private String operationTime;
 
-    private String BreakDay;
+    private String breakDay;
 
     private String status;
 
     private List<Menu> menuList;
+
+
 }

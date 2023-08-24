@@ -1,10 +1,12 @@
 package com.example.delivEatAPI.domain.user;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -12,20 +14,28 @@ import javax.persistence.*;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "userId", nullable = false) // Primary Key
-    private Long userId;
+    @Column(name = "userId", columnDefinition = "BINARY(16)")
+    private UUID userId;
 
-    @Column(name = "name", nullable = false)
+
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "phoneNumber", nullable = false)
+    @Column(name = "phoneNumber")
     private String phoneNumber;
 
     @Column(name = "address")
     private String address;
 
+    @Builder
     public User(String name, String phoneNumber, String address) {
+        this.userId = UUID.randomUUID();
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
+    public void update(String name, String phoneNumber, String address){
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;

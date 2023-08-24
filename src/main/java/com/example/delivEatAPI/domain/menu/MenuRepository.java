@@ -8,13 +8,13 @@ import java.util.*;
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 
-    List<Menu> findByShop_ShopId(Long shopId);
+    List<Menu> findByShop_ShopId(UUID shopId);
 
-    Menu findByShop_ShopIdAndMenuId(Long shopId, Long menuId);
+    Menu findByShop_ShopIdAndMenuId(UUID shopId, Long menuId);
 
-    void deleteAllByShop_ShopId(Long ShopId);
+    void deleteAllByShop_ShopId(UUID ShopId);
 
-    void deleteMenuByShop_ShopIdAndMenuId(Long shopId, Long menuId);
+    void deleteMenuByShop_ShopIdAndMenuId(UUID shopId, Long menuId);
 
 }
 

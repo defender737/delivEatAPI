@@ -2,15 +2,16 @@ package com.example.delivEatAPI.domain.order;
 
 
 import java.util.List;
+import java.util.UUID;
 
 
 public interface OrderService {
 
-    void addOrder(Long user_id, OrderDto orderDto);
+    void addOrder(UUID user_id, OrderDto orderDto);
 
-    OrderDto getOrder(Long order_id);
+    OrderDto getOrder(UUID order_id);
 
-    List<OrderDto> getOrderList(Long user_id);
+    List<OrderDto> getOrderList(UUID user_id);
 
-    void changeStatus(Long order_id, String status);
+    void changeStatus(UUID order_id, String status);
 }

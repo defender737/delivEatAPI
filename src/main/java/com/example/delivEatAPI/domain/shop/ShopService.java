@@ -1,11 +1,15 @@
 package com.example.delivEatAPI.domain.shop;
 
+import java.util.UUID;
+
 public interface ShopService {
     void addShop(ShopDto shopDto);
 
-    ShopDto getShop(Long shop_id);
+    ShopDto getShop(UUID shop_id);
 
-    void editShop(Long shop_id, ShopDto shopDto);
+    void editShop(ShopDto shopDto);
 
-    void deleteShop(Long shop_id);
+    void deleteShop(UUID shop_id);
+
+    void changeStatus(UUID shop_id, String status);
 }

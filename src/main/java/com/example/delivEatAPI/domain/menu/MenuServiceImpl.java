@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +30,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public void addMenu(Long shopId, MenuDto menuDto) {
+    public void addMenu(UUID shopId, MenuDto menuDto) {
         if(shopId.equals(menuDto.getShop().getShopId())){
             menuRepository.save(menuMapper.toEntity(menuDto));
         }else {
@@ -40,7 +41,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public List<MenuDto> getMenuList(Long shopId) {
+    public List<MenuDto> getMenuList(UUID shopId) {
         try {
             List<Menu> menuList = menuRepository.findByShop_ShopId(shopId);
             return menuMapper.toDtoList(menuList);
@@ -51,7 +52,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public MenuDto getMenu(Long shopId, Long menuId) {
+    public MenuDto getMenu(UUID shopId, Long menuId) {
         Menu menu = menuRepository.findByShop_ShopIdAndMenuId(shopId, menuId);
 
         MenuDto menuDto = menuMapper.toDto(menu);
@@ -66,26 +67,24 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     @Modifying
-    public void editMenu(Long shopId, Long menuId, MenuDto menuDto) {
-        Menu menu = menuRepository.findByShop_ShopIdAndMenuId(shopId, menuId);
-
+    public void editMenu(UUID shopId, MenuDto menuDto) {
+        Menu menu = menuRepository.findByShop_ShopIdAndMenuId(shopId, menuDto.getMenuId());
         if (menu == null) {
             throw new MenuNotFoundException("해당 메뉴는 존재하지 않습니다.");
         }
-
-        menuMapper.updateFromDto(menuDto, menu);
+        menu.update(menuDto.getMenuName(), menuDto.getMenuPrice(), menuDto.getCategory());
         menuRepository.save(menu);
     }
 
     @Override
     @Transactional
-    public void deleteAllMenu(Long shopId) {
+    public void deleteAllMenu(UUID shopId) {
         menuRepository.deleteAllByShop_ShopId(shopId);
     }
 
     @Override
     @Transactional
-    public void deleteMenu(Long shopId, Long menuId) {
+    public void deleteMenu(UUID shopId, Long menuId) {
         menuRepository.deleteMenuByShop_ShopIdAndMenuId(shopId, menuId);
     }
 }

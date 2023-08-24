@@ -2,6 +2,7 @@ package com.example.delivEatAPI.domain.cart;
 
 import com.example.delivEatAPI.domain.order.Order;
 import com.example.delivEatAPI.domain.menu.Menu;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,11 +28,16 @@ public class Cart {
     private Menu menu;
 
     @Column(name = "quantity", nullable = false)
-    private String quantity;
+    private int quantity;
 
-    public Cart(Order order, Menu menuId, String quantity) {
+    @Builder
+    public Cart(Order order, Menu menu, int quantity) {
         this.order = order;
-        this.menu = menuId;
+        this.menu = menu;
+        this.quantity = quantity;
+    }
+
+    public void changeQuantity(int quantity){
         this.quantity = quantity;
     }
 }

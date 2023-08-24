@@ -1,7 +1,12 @@
 package com.example.delivEatAPI.domain.cart;
 
-public interface CartService {
-    void addCart(Long order_id, CartDto cartDto);
+import java.util.UUID;
 
-    void deleteCart(Long order_id, Long cart_id);
+public interface CartService {
+    void addCart(UUID order_id, CartDto cartDto);
+
+    void changeQuantity(UUID order_id, Long cart_id, int quentity);
+
+    void deleteCart(UUID order_id, Long cart_id);
+
 }

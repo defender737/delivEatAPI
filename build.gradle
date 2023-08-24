@@ -16,22 +16,33 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot Starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-    implementation 'org.projectlombok:lombok:1.18.26'
 
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
-    annotationProcessor "org.projectlombok:lombok:1.18.16"
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation 'org.modelmapper:modelmapper:3.1.1'
+    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    implementation 'org.projectlombok:lombok:1.18.26'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+    // MariaDB JDBC
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
+
+    // qlrm
     implementation group: 'ch.simas.qlrm', name: 'qlrm', version: '1.7.1'
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()

@@ -2,18 +2,19 @@ package com.example.delivEatAPI.domain.menu;
 
 
 import java.util.List;
+import java.util.UUID;
 
 
 public interface MenuService {
 
-    void addMenu(Long shopId, MenuDto menuDto);
-    List<MenuDto> getMenuList(Long shopId);
+    void addMenu(UUID shopId, MenuDto menuDto);
+    List<MenuDto> getMenuList(UUID shopId);
 
-    MenuDto getMenu(Long shop_id, Long menuId);
+    MenuDto getMenu(UUID shop_id, Long menuId);
 
-    void editMenu(Long shop_id, Long menu_id, MenuDto menuDto);
+    void editMenu(UUID shop_id, MenuDto menuDto);
 
-    void deleteAllMenu(Long shopId);
+    void deleteAllMenu(UUID shopId);
 
-    void deleteMenu(Long shop_id, Long menu_id);
+    void deleteMenu(UUID shop_id, Long menu_id);
 }
