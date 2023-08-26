@@ -1,11 +1,11 @@
 package com.example.delivEatAPI.domain.cart;
 
+import com.example.delivEatAPI.domain.cart.exception.CartOrderMismatchException;
 import com.example.delivEatAPI.domain.order.Order;
-import com.example.delivEatAPI.domain.order.OrderMapper;
 import com.example.delivEatAPI.domain.order.OrderRepository;
-import org.springframework.http.HttpStatus;
+import com.example.delivEatAPI.error.commonException.EntityNotFoundException;
+import com.example.delivEatAPI.error.ErrorCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -28,11 +28,11 @@ public class CartServiceImpl implements CartService {
 
         if (orderId.equals(cartDto.getOrder().getOrderId())) {
             Order order = orderRepository.findById(orderId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                    .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND, "not found."));
             order.addCart(cartMapper.toEntity(cartDto));
             orderRepository.save(order);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "OrderId가 일치하지 않습니다.");
+            throw new CartOrderMismatchException(cartDto.getCartId());
         }
     }
 
@@ -40,12 +40,12 @@ public class CartServiceImpl implements CartService {
     public void changeQuantity(UUID orderId, Long cartId, int quantity) {
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND, "not found."));
 
         Cart cartToChange = order.getCartList().stream()
                 .filter(cart -> cart.getCartId().equals(cartId))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.CART_NOT_FOUND, "not found."));
 
         cartToChange.changeQuantity(quantity);
         cartRepository.save(cartToChange);
@@ -54,13 +54,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCart(UUID orderId, Long cartId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND, "not found."));
 
         // order의 cartList에 cartId를 가진 Cart가 있다면
         Cart cartToDelete = order.getCartList().stream()
                 .filter(cart -> cart.getCartId().equals(cartId))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.CART_NOT_FOUND, "not found."));
 
         order.deleteCart(cartToDelete);
         orderRepository.save(order);

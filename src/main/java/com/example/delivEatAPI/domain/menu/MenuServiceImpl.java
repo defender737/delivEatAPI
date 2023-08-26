@@ -1,17 +1,17 @@
 package com.example.delivEatAPI.domain.menu;
 
-import com.example.delivEatAPI.error.MenuNotFoundException;
+
+import com.example.delivEatAPI.domain.menu.exception.ShopMenuMismatchException;
+import com.example.delivEatAPI.error.commonException.EntityNotFoundException;
+import com.example.delivEatAPI.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 
@@ -34,7 +34,7 @@ public class MenuServiceImpl implements MenuService {
         if(shopId.equals(menuDto.getShop().getShopId())){
             menuRepository.save(menuMapper.toEntity(menuDto));
         }else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "shopId가 일치하지 않습니다.");
+            throw new ShopMenuMismatchException(menuDto.getMenuId());
         }
 
     }
@@ -46,7 +46,7 @@ public class MenuServiceImpl implements MenuService {
             List<Menu> menuList = menuRepository.findByShop_ShopId(shopId);
             return menuMapper.toDtoList(menuList);
         }catch (DataAccessException e){
-            throw new RuntimeException("메뉴 목록을 가져올 수 없습니다.", e);
+            throw new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND, "not found.");
         }
     }
 
@@ -58,7 +58,7 @@ public class MenuServiceImpl implements MenuService {
         MenuDto menuDto = menuMapper.toDto(menu);
 
         if (menu == null) {
-            throw new MenuNotFoundException("메뉴를 찾을 수 없습니다. ID: " + menuId);
+            throw new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND, "not found.");
         }
 
         return menuDto;
@@ -70,7 +70,7 @@ public class MenuServiceImpl implements MenuService {
     public void editMenu(UUID shopId, MenuDto menuDto) {
         Menu menu = menuRepository.findByShop_ShopIdAndMenuId(shopId, menuDto.getMenuId());
         if (menu == null) {
-            throw new MenuNotFoundException("해당 메뉴는 존재하지 않습니다.");
+            throw new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND, "not found.");
         }
         menu.update(menuDto.getMenuName(), menuDto.getMenuPrice(), menuDto.getCategory());
         menuRepository.save(menu);
@@ -85,6 +85,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public void deleteMenu(Long menuId) {
+
+        menuRepository.findById(menuId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND, "not found."));
+
         menuRepository.deleteById(menuId);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.delivEatAPI.domain.user;
 
+
+import com.example.delivEatAPI.error.commonException.EntityNotFoundException;
+import com.example.delivEatAPI.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     public UserDto getUser(UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다. UserId: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "not found."));
 
         return userMapper.toDto(user);
     }
@@ -46,7 +48,7 @@ public class UserServiceImpl implements UserService {
     public void editMenu(UserDto userDto) {
         UUID userId = userDto.getUserId();
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다. UserId: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "not found."));
 
         user.update(userDto.getName(), userDto.getPhoneNumber(), userDto.getAddress());
         userRepository.save(user);
@@ -57,10 +59,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
 
     public void deleteMenu(UUID userId) {
-        try {
-            userRepository.deleteById(userId);
-        } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("해당 사용자를 찾을 수 없습니다.");
-        }
+        userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "not found."));
+
+        userRepository.deleteById(userId);
     }
 }

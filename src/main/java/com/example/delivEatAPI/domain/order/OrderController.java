@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class OrderController {
     public OrderController(OrderService orderService){this. orderService = orderService;}
 
     @PostMapping("v1/user/{user_id}/order")
-    public ResponseEntity<String> addOrder(@PathVariable UUID user_id, @RequestBody OrderDto orderDto){
+    public ResponseEntity<String> addOrder(@PathVariable UUID user_id, @Valid @RequestBody OrderDto orderDto){
         orderService.addOrder(user_id, orderDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("주문이 완료되었습니다. 주문ID: " +  orderDto.getOrderId());
     }

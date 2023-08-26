@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -17,7 +18,7 @@ public class ShopController {
     }
 
     @PostMapping
-    public ResponseEntity<String>addShop(@RequestBody ShopDto shopDto){
+    public ResponseEntity<String>addShop(@Valid @RequestBody ShopDto shopDto){
         shopService.addShop(shopDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("매장이 성공적으로 추가되었습니다.");
     }
@@ -29,7 +30,7 @@ public class ShopController {
     }
 
     @PutMapping
-    public ResponseEntity<String>editShop(@RequestBody ShopDto shopDto){
+    public ResponseEntity<String>editShop(@Valid @RequestBody ShopDto shopDto){
         shopService.editShop(shopDto);
         return ResponseEntity.ok("매장 정보가 성공적으로 수정되었습니다.");
     }

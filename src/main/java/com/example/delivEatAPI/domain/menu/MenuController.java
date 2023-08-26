@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class MenuController {
 
 
     @PostMapping
-    public ResponseEntity<String> addMenu(@PathVariable UUID shop_id, @RequestBody MenuDto menuDto) {
+    public ResponseEntity<String> addMenu(@PathVariable UUID shop_id, @Valid @RequestBody MenuDto menuDto) {
         menuService.addMenu(shop_id, menuDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("메뉴가 성공적으로 추가되었습니다.");
     }
@@ -39,7 +40,7 @@ public class MenuController {
 
 
     @PutMapping("/{menu_id}")
-    public ResponseEntity<String> editMenu(@PathVariable UUID shop_id, @RequestBody MenuDto menuDto) {
+    public ResponseEntity<String> editMenu(@PathVariable UUID shop_id, @Valid  @RequestBody MenuDto menuDto) {
         menuService.editMenu(shop_id, menuDto);
         return ResponseEntity.ok("메뉴가 성공적으로 수정되었습니다.");
     }

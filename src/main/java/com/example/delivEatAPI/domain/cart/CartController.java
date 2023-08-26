@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -18,7 +19,7 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addCart(@PathVariable UUID order_id, @RequestBody CartDto cartDto){
+    public ResponseEntity<String> addCart(@PathVariable UUID order_id, @Valid @RequestBody CartDto cartDto){
         cartService.addCart(order_id, cartDto);
         return ResponseEntity.ok("카트 추가 완료");
     }

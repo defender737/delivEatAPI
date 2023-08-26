@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -18,7 +19,7 @@ public class DeliveryController {
     }
 
     @PostMapping
-    public ResponseEntity<String> startDelivery(@RequestBody DeliveryDto deliveryDto) {
+    public ResponseEntity<String> startDelivery(@Valid @RequestBody DeliveryDto deliveryDto) {
         deliveryService.startDelivery(deliveryDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("배달이 시작되었습니다.");
     }
