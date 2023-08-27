@@ -18,4 +18,6 @@ public interface OrderService {
     void changeStatus(UUID order_id, String status);
 
     void addCartToOrder(UUID order_id, CartDto cartDto);
+
+    void deleteCartToOrder(UUID order_id, Long cart_id);
 }

@@ -50,6 +50,14 @@ public class OrderController {
                 .body("주문에 상품이 추가되었습니다.");
     }
 
+    @PutMapping("{order_id}/cart/{cart_id}")
+    public ResponseEntity<String> deleteCartToOrder(@PathVariable UUID order_id, @PathVariable Long cart_id) {
+        orderService.deleteCartToOrder(order_id, cart_id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("주문에 상품이 삭제되었습니다.");
+    }
+
     @PutMapping("{order_id}/{status}")
     public ResponseEntity <String> ChangeOrderStatus(@PathVariable UUID order_id, @PathVariable String status) {
         orderService.changeStatus(order_id, status);

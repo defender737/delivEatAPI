@@ -1,8 +1,10 @@
 package com.example.delivEatAPI.domain.order;
 
 
+import com.example.delivEatAPI.domain.cart.Cart;
 import com.example.delivEatAPI.domain.cart.CartDto;
 import com.example.delivEatAPI.domain.cart.CartMapper;
+import com.example.delivEatAPI.domain.cart.CartRepository;
 import com.example.delivEatAPI.domain.order.exception.UserOrderMismatchException;
 import com.example.delivEatAPI.error.commonException.EntityNotFoundException;
 import com.example.delivEatAPI.error.ErrorCode;
@@ -19,13 +21,15 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private  final CartRepository cartRepository;
     private final CartMapper cartMapper;
 
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, CartMapper cartMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, CartRepository cartRepository, CartMapper cartMapper) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+        this.cartRepository = cartRepository;
         this.cartMapper = cartMapper;
     }
 
@@ -67,6 +71,17 @@ public class OrderServiceImpl implements OrderService {
         order.addCart(cartMapper.toEntity(cartDto));
         orderRepository.save(order);
     }
+
+    @Override
+    public void deleteCartToOrder(UUID order_id, Long cartId) {
+        Order order = orderRepository.findById(order_id)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND, "해당 주문을 찾을 수 없습니다."));
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.CART_NOT_FOUND, "해당 상품은 존재하지 않습니다."));
+        order.deleteCart(cart);
+        orderRepository.save(order);
+    }
+
     @Override
     @Transactional
     public void changeStatus(UUID order_id, String status) {
