@@ -1,5 +1,6 @@
-package com.example.delivEatAPI.domain.shop;
+package com.example.delivEatAPI.domain.menu;
 
+import com.example.delivEatAPI.domain.shop.Shop;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,13 @@ import javax.persistence.*;
 public class MenuDto {
 
     private Long menuId;
+
     private String menuName;
+
     private int menuPrice;
+
     private String category;
-    private Long shopId;
+
+    private Shop shop;
 
 }

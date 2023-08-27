@@ -1,0 +1,59 @@
+package com.example.delivEatAPI.domain.order;
+
+import com.example.delivEatAPI.domain.cart.Cart;
+import com.example.delivEatAPI.domain.user.User;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Getter
+@NoArgsConstructor
+@Table(name = "order")
+public class Order {
+
+    @Id
+
+    @Column(name = "orderId", columnDefinition = "BINARY(16)")
+    private UUID orderId;
+
+    @Column(name = "address", nullable = false)
+    private String address;
+
+    @Column(name = "datetime", nullable = false)
+    private LocalDateTime datetime;
+
+    @Column(name = "status")
+    private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "order")
+    private final List<Cart> cartList = new ArrayList<>();
+
+    @Builder
+    public Order(String address, LocalDateTime datetime, User user) {
+        this.orderId = UUID.randomUUID();
+        this.address = address;
+        this.datetime = datetime;
+        this.status = "접수중";
+        this.user = user;
+    }
+
+    public void changeStatus(String status){this.status = status;}
+    public void addCart(Cart cart){cartList.add(cart);}
+    public void deleteCart(Cart cart){cartList.remove(cart);}
+
+    @PrePersist
+    protected void onCreate() {
+        datetime = LocalDateTime.now();
+    }
+}
