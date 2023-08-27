@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,14 +15,17 @@ import javax.persistence.*;
 @Setter
 public class MenuDto {
 
-    private Long menuId;
+    private Long id;
 
+    @NotBlank(message = "필수 입력 사항입니다.")
     private String menuName;
 
+    @NotBlank(message = "필수 입력 사항입니다.")
     private int menuPrice;
 
     private String category;
 
+    @NotBlank(message = "필수 입력 사항입니다.")
     private Shop shop;
 
 }

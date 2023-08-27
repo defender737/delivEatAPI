@@ -26,9 +26,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void addUser(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
-        if(user == null){
-            throw new RuntimeException("실패");
-        }
         userRepository.save(user);
     }
 
@@ -37,8 +34,7 @@ public class UserServiceImpl implements UserService {
 
     public UserDto getUser(UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "not found."));
-
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "해당 사용자를 찾을 수 없습니다."));
         return userMapper.toDto(user);
     }
 
@@ -46,10 +42,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Modifying
     public void editMenu(UserDto userDto) {
-        UUID userId = userDto.getUserId();
+        UUID userId = userDto.getId();
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "not found."));
-
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "해당 사용자를 찾을 수 없습니다."));
         user.update(userDto.getName(), userDto.getPhoneNumber(), userDto.getAddress());
         userRepository.save(user);
     }
@@ -59,9 +54,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
 
     public void deleteMenu(UUID userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "not found."));
-
-        userRepository.deleteById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND, "해당 사용자를 찾을 수 없습니다."));
+        userRepository.delete(user);
     }
 }

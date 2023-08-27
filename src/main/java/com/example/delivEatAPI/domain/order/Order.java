@@ -2,6 +2,7 @@ package com.example.delivEatAPI.domain.order;
 
 import com.example.delivEatAPI.domain.cart.Cart;
 import com.example.delivEatAPI.domain.user.User;
+import com.example.delivEatAPI.global.config.DateTimeProvider;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +16,13 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "order")
+@Table(name = "orders")
 public class Order {
 
     @Id
 
-    @Column(name = "orderId", columnDefinition = "BINARY(16)")
-    private UUID orderId;
+    @Column(name = "id", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "address", nullable = false)
     private String address;
@@ -40,8 +41,8 @@ public class Order {
     private final List<Cart> cartList = new ArrayList<>();
 
     @Builder
-    public Order(String address, LocalDateTime datetime, User user) {
-        this.orderId = UUID.randomUUID();
+    public Order(String address,LocalDateTime datetime, User user) {
+        this.id = UUID.randomUUID();
         this.address = address;
         this.datetime = datetime;
         this.status = "접수중";
@@ -53,7 +54,7 @@ public class Order {
     public void deleteCart(Cart cart){cartList.remove(cart);}
 
     @PrePersist
-    protected void onCreate() {
-        datetime = LocalDateTime.now();
+    protected void presetDateTime() {
+        datetime = DateTimeProvider.getCurrentDateTime();
     }
 }

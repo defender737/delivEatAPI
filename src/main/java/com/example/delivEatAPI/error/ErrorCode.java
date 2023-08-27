@@ -1,5 +1,8 @@
 package com.example.delivEatAPI.error;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorCode {
 
     INVALID_INPUT_VALUE(400, "COMMON-001", "유효성 검증에 실패"),
@@ -28,18 +31,5 @@ public enum ErrorCode {
         this.status = status;
         this.code = code;
         this.description = description;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    // for Doc
-    public String getDescription() {
-        return description;
     }
 }

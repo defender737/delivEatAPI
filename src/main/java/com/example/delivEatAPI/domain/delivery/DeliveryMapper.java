@@ -13,6 +13,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface DeliveryMapper extends GenericMapper<DeliveryDto, Delivery> {
 
+
     @Override
     @Mapping(target = "pickupTime", ignore = true)
     Delivery toEntity(DeliveryDto deliveryDto);

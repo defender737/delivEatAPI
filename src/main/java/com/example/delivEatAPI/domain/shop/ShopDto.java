@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +19,11 @@ import java.util.UUID;
 public class ShopDto {
 
 
-    private UUID shopId;
+    private UUID id;
 
+    @NotBlank(message = "필수 입력 사항입니다.")
     private String shopName;
-
+    @NotBlank(message = "필수 입력 사항입니다.")
     private String address;
 
     private String shopPhoneNumber;
@@ -33,6 +35,4 @@ public class ShopDto {
     private String status;
 
     private List<Menu> menuList;
-
-
 }

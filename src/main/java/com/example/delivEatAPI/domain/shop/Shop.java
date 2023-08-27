@@ -1,6 +1,5 @@
 package com.example.delivEatAPI.domain.shop;
 
-
 import com.example.delivEatAPI.domain.menu.Menu;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
@@ -19,13 +18,13 @@ import java.util.UUID;
 public class Shop {
 
     @Id
-    @Column(name = "shopId", columnDefinition = "BINARY(16)")
-    private UUID shopId;
+    @Column(name = "id", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "shopName", nullable = false) // 음식 이름
+    @Column(name = "shopName", nullable = false)
     private String shopName;
 
-    @Column(name = "address", nullable = false) // 음식 가격
+    @Column(name = "address", nullable = false)
     private String address;
 
     @Column(name = "shopPhoneNumber")
@@ -34,7 +33,7 @@ public class Shop {
     @Column(name = "operationTime")
     private String operationTime;
 
-    @Column(name = "BreakDay")
+    @Column(name = "breakDay")
     private String breakDay;
 
     @Column(name = "status")
@@ -47,7 +46,7 @@ public class Shop {
 
     @Builder
     public Shop(String shopName, String address, String shopPhoneNumber, String operationTime, String breakDay, String status) {
-        this.shopId = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.shopName = shopName;
         this.address = address;
         this.shopPhoneNumber = shopPhoneNumber;

@@ -2,6 +2,7 @@ package com.example.delivEatAPI.domain.order;
 
 
 
+import com.example.delivEatAPI.domain.cart.CartDto;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("v1/order/")
 public class OrderController {
 
     private final OrderService orderService;
@@ -20,34 +22,39 @@ public class OrderController {
     @Autowired
     public OrderController(OrderService orderService){this. orderService = orderService;}
 
-    @PostMapping("v1/user/{user_id}/order")
+    @PostMapping("/user/{user_id}")
     public ResponseEntity<String> addOrder(@PathVariable UUID user_id, @Valid @RequestBody OrderDto orderDto){
         orderService.addOrder(user_id, orderDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("주문이 완료되었습니다. 주문ID: " +  orderDto.getOrderId());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("주문이 접수되었습니다.");
     }
 
-    @GetMapping("v1/order/{order_id}")
+    @GetMapping("{order_id}")
     public ResponseEntity<OrderDto> getOrder(@PathVariable UUID order_id) {
-        OrderDto gettedorder = orderService.getOrder(order_id);
-        return ResponseEntity.ok(gettedorder);
+        OrderDto order = orderService.getOrder(order_id);
+        return ResponseEntity.ok(order);
     }
 
-    @GetMapping("v1/user/{user_id}/order")
+    @GetMapping("user/{user_id}/")
     public ResponseEntity <List<OrderDto>> getOrderList(@PathVariable UUID user_id) {
-        List<OrderDto> gettedorderList = orderService.getOrderList(user_id);
-        return ResponseEntity.ok(gettedorderList);
+        List<OrderDto> orderList = orderService.getOrderList(user_id);
+        return ResponseEntity.ok(orderList);
     }
 
-    @PutMapping("v1/order/{order_id}/{status}")
+    @PutMapping("{order_id}/")
+    public ResponseEntity<String> addCartToOrder(@PathVariable UUID order_id, @Valid @RequestBody CartDto cartDto) {
+        orderService.addCartToOrder(order_id, cartDto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("주문에 상품이 추가되었습니다.");
+    }
+
+    @PutMapping("{order_id}/{status}")
     public ResponseEntity <String> ChangeOrderStatus(@PathVariable UUID order_id, @PathVariable String status) {
         orderService.changeStatus(order_id, status);
-        return ResponseEntity.status(HttpStatus.CREATED).body("주문상태가 변경되었습니다. 주문상태: " + status + "주문ID: " +  order_id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(String.format("주문상태가 %s(으)로 변경되었습니다.", status));
     }
-
-
-
-
-
-
-
 }

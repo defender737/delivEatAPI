@@ -30,7 +30,7 @@ public class ShopServiceImpl implements ShopService{
     @Transactional
     public ShopDto getShop(UUID shopId) {
         Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "not found."));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
 
         return shopMapper.toDto(shop);
     }
@@ -39,9 +39,9 @@ public class ShopServiceImpl implements ShopService{
     @Transactional
     @Modifying
     public void editShop(ShopDto shopDto) {
-        UUID shopId = shopDto.getShopId();
+        UUID shopId = shopDto.getId();
         Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "not found."));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
         shop.update(shopDto.getShopName(), shopDto.getAddress(), shopDto.getShopPhoneNumber(), shopDto.getOperationTime(), shopDto.getBreakDay(), shopDto.getStatus());
         shopRepository.save(shop);
     }
@@ -49,10 +49,10 @@ public class ShopServiceImpl implements ShopService{
     @Override
     @Transactional
     public void deleteShop(UUID shopId) {
-        shopRepository.findById(shopId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "not found."));
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
 
-        shopRepository.deleteById(shopId);
+        shopRepository.delete(shop);
     }
 
     @Override
@@ -60,10 +60,8 @@ public class ShopServiceImpl implements ShopService{
     @Modifying
     public void changeStatus(UUID shopId, String status) {
         Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "not found."));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
         shop.changeStatus(status);
         shopRepository.save(shop);
     }
-
-
 }

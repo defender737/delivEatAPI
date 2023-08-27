@@ -14,9 +14,8 @@ import java.util.UUID;
 @Table(name = "user")
 public class User {
     @Id
-    @Column(name = "userId", columnDefinition = "BINARY(16)")
-    private UUID userId;
-
+    @Column(name = "id", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "name")
     private String name;
@@ -29,7 +28,7 @@ public class User {
 
     @Builder
     public User(String name, String phoneNumber, String address) {
-        this.userId = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;

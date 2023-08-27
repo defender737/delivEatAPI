@@ -16,8 +16,8 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "cartId", nullable = false) // Primary Key
-    private Long cartId;
+    @Column(name = "id", nullable = false) // Primary Key
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "orderId", nullable = false)

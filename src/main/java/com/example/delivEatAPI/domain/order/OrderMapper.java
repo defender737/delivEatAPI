@@ -12,7 +12,7 @@ import java.util.List;
 )
 public interface OrderMapper extends GenericMapper<OrderDto, Order> {
 
-    @Mapping(target = "status", constant = "접수중")
+    @Mapping(target = "status", source = "status")
     @Override
     OrderDto toDto(Order entity);
 
@@ -21,5 +21,4 @@ public interface OrderMapper extends GenericMapper<OrderDto, Order> {
     Order toEntity(OrderDto orderDto);
 
     List<OrderDto> toDtoList(List<Order> entityList);
-
 }
