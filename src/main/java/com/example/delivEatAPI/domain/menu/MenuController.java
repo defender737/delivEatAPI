@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,9 +21,11 @@ public class MenuController {
 
 
     @PostMapping
-    public ResponseEntity<String> addMenu(@PathVariable UUID shop_id, @RequestBody MenuDto menuDto) {
+    public ResponseEntity<String> addMenu(@PathVariable UUID shop_id, @Valid @RequestBody MenuDto menuDto) {
         menuService.addMenu(shop_id, menuDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("메뉴가 성공적으로 추가되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("메뉴가 추가되었습니다.");
     }
 
     @GetMapping
@@ -39,20 +42,26 @@ public class MenuController {
 
 
     @PutMapping("/{menu_id}")
-    public ResponseEntity<String> editMenu(@PathVariable UUID shop_id, @RequestBody MenuDto menuDto) {
+    public ResponseEntity<String> editMenu(@PathVariable UUID shop_id, @Valid  @RequestBody MenuDto menuDto) {
         menuService.editMenu(shop_id, menuDto);
-        return ResponseEntity.ok("메뉴가 성공적으로 수정되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("메뉴 정보가 수정되었습니다.");
     }
 
     @DeleteMapping
     public ResponseEntity<String> deleteAllMenu(@PathVariable UUID shop_id) {
         menuService.deleteAllMenu(shop_id);
-        return ResponseEntity.ok(shop_id + "의 메뉴가 성공적으로 삭제되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("메뉴가 삭제되었습니다.");
     }
 
     @DeleteMapping("/{menu_id}")
     public ResponseEntity<String> deleteMenu(@PathVariable Long menu_id) {
         menuService.deleteMenu(menu_id);
-        return ResponseEntity.ok(menu_id + "의 메뉴가 성공적으로 삭제되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("메뉴가 삭제되었습니다.");
     }
 }

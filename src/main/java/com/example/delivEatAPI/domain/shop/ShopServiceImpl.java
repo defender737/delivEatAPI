@@ -1,11 +1,10 @@
 package com.example.delivEatAPI.domain.shop;
 
-import com.example.delivEatAPI.error.ShopNotFoundException;
+import com.example.delivEatAPI.error.commonException.EntityNotFoundException;
+import com.example.delivEatAPI.error.ErrorCode;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -31,7 +30,7 @@ public class ShopServiceImpl implements ShopService{
     @Transactional
     public ShopDto getShop(UUID shopId) {
         Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new ShopNotFoundException("해당 매장을 찾을 수 없습니다.", shopId));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
 
         return shopMapper.toDto(shop);
     }
@@ -40,9 +39,9 @@ public class ShopServiceImpl implements ShopService{
     @Transactional
     @Modifying
     public void editShop(ShopDto shopDto) {
-        UUID shopId = shopDto.getShopId();
+        UUID shopId = shopDto.getId();
         Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new ShopNotFoundException("해당 매장을 찾을 수 없습니다.", shopId));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
         shop.update(shopDto.getShopName(), shopDto.getAddress(), shopDto.getShopPhoneNumber(), shopDto.getOperationTime(), shopDto.getBreakDay(), shopDto.getStatus());
         shopRepository.save(shop);
     }
@@ -50,7 +49,10 @@ public class ShopServiceImpl implements ShopService{
     @Override
     @Transactional
     public void deleteShop(UUID shopId) {
-        shopRepository.deleteById(shopId);
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
+
+        shopRepository.delete(shop);
     }
 
     @Override
@@ -58,10 +60,8 @@ public class ShopServiceImpl implements ShopService{
     @Modifying
     public void changeStatus(UUID shopId, String status) {
         Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new ShopNotFoundException("해당 매장을 찾을 수 없습니다.", shopId));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND, "해당 상점을 찾을 수 없습니다."));
         shop.changeStatus(status);
         shopRepository.save(shop);
     }
-
-
 }

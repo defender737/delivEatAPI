@@ -12,7 +12,4 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface UserMapper extends GenericMapper<UserDto, User> {
-
-
-
 }

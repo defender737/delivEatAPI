@@ -1,9 +1,9 @@
 package com.example.delivEatAPI.domain.delivery;
 
 import com.example.delivEatAPI.domain.order.OrderService;
-import org.springframework.http.HttpStatus;
+import com.example.delivEatAPI.error.commonException.EntityNotFoundException;
+import com.example.delivEatAPI.error.ErrorCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -24,7 +24,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 
     @Override
     public void startDelivery(DeliveryDto deliveryDto) {
-        orderService.changeStatus(deliveryDto.getOrder().getOrderId(), "배달중");
+        orderService.changeStatus(deliveryDto.getOrder().getId(), "배달중");
         Delivery delivery = deliveryMapper.toEntity(deliveryDto);
         deliveryRepository.save(delivery);
 
@@ -33,18 +33,15 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Override
     public DeliveryDto getDelivery(UUID delivery_id) {
         Delivery delivery = deliveryRepository.findById(delivery_id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "배송 조회 불가. 배달 ID: " + delivery_id));
-
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND, "배송 정보를 찾을 수 없습니다."));
         return deliveryMapper.toDto(delivery);
     }
 
     @Override
     public void endDelivery(UUID delivery_id) {
         Delivery delivery = deliveryRepository.findById(delivery_id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 배달정보를 찾을 수 없습니다. 배달 ID: " + delivery_id));
-
-        orderService.changeStatus(delivery.getOrder().getOrderId(), "배달완료");
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND, "배송 정보를 찾을 수 없습니다."));
+        orderService.changeStatus(delivery.getOrder().getId(), "배달완료");
         deliveryRepository.save(delivery);
     }
-
 }

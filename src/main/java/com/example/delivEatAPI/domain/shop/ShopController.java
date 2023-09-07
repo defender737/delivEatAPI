@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -17,9 +18,11 @@ public class ShopController {
     }
 
     @PostMapping
-    public ResponseEntity<String>addShop(@RequestBody ShopDto shopDto){
+    public ResponseEntity<String>addShop(@Valid @RequestBody ShopDto shopDto){
         shopService.addShop(shopDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("매장이 성공적으로 추가되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("상점이 추가되었습니다.");
     }
 
     @GetMapping("/{shop_id}")
@@ -29,20 +32,26 @@ public class ShopController {
     }
 
     @PutMapping
-    public ResponseEntity<String>editShop(@RequestBody ShopDto shopDto){
+    public ResponseEntity<String>editShop(@Valid @RequestBody ShopDto shopDto){
         shopService.editShop(shopDto);
-        return ResponseEntity.ok("매장 정보가 성공적으로 수정되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("상점 정보를 수정하였습니다.");
     }
 
     @DeleteMapping("/{shop_id}")
     public ResponseEntity<String>deleteShop(@PathVariable UUID shop_id){
         shopService.deleteShop(shop_id);
-        return ResponseEntity.ok("매장이 성공적으로 삭제되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("상점이 삭제되었습니다.");
     }
 
     @PutMapping("/{shop_id}/{status}")
     public ResponseEntity <String> ChangeOrderStatus(@PathVariable UUID shop_id, @PathVariable String status) {
         shopService.changeStatus(shop_id, status);
-        return ResponseEntity.status(HttpStatus.CREATED).body("매장상태가 변경되었습니다. 매장상태: " + status + "매장id: " +  shop_id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(String.format("상점상태가 %s(으)로 변경되었습니다.", status));
     }
 }

@@ -11,8 +11,8 @@ import javax.persistence.*;
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "menuId", nullable = false)
-    private Long menuId;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Column(name = "menuName", nullable = false)
     private String menuName;

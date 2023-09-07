@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,13 +16,15 @@ import java.util.UUID;
 @Setter
 public class DeliveryDto {
 
-    private UUID deliveryId;
+    private UUID id;
 
+    @NotBlank(message = "필수 입력 사항입니다.")
     private String riderName;
 
     private LocalDateTime pickupTime;
 
     private String status;
 
+    @NotBlank(message = "필수 입력 사항입니다.")
     private Order order;
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -18,9 +19,11 @@ public class DeliveryController {
     }
 
     @PostMapping
-    public ResponseEntity<String> startDelivery(@RequestBody DeliveryDto deliveryDto) {
+    public ResponseEntity<String> startDelivery(@Valid @RequestBody DeliveryDto deliveryDto) {
         deliveryService.startDelivery(deliveryDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("배달이 시작되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("배달이 시작되었습니다.");
     }
 
     @GetMapping("{delivery_id}")
@@ -32,7 +35,9 @@ public class DeliveryController {
     @PutMapping("{delivery_id}")
     public ResponseEntity<String> endDelivery(@PathVariable UUID delivery_id) {
         deliveryService.endDelivery(delivery_id);
-        return ResponseEntity.status(HttpStatus.CREATED).body("배달이 완료되었습니다.");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("배달이 완료되었습니다.");
     }
 
 }
